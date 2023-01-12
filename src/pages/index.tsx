@@ -4,7 +4,7 @@ import { Box, Container, Link, Typography } from '@mui/material';
 import React from 'react';
 
 import Logo from '@/components/common/logo';
-import LoginForm, { LoginFormProps } from '@/components/container/login/login-form';
+import LoginForm from '@/components/container/login/login-form';
 
 /// ///////////////////////////////
 
@@ -21,7 +21,7 @@ const ContentStyle = styled('div')({
   background: '#fff',
 });
 
-function Login({ setAuth }: LoginFormProps) {
+function Login() {
   return (
     <Container maxWidth="sm">
       <ContentStyle>
@@ -30,7 +30,7 @@ function Login({ setAuth }: LoginFormProps) {
           <Typography sx={{ color: 'text.secondary', mb: 5 }}>Login to your account</Typography>
         </HeadingStyle>
 
-        <LoginForm setAuth={setAuth} />
+        <LoginForm />
 
         <Typography variant="body2" align="center" sx={{ mt: 3 }}>
           Don’t have an account? <Link variant="subtitle2">Sign up</Link>

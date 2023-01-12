@@ -15,11 +15,7 @@ import { Form, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 
-export type LoginFormProps = {
-  setAuth: (isLogin: boolean) => {};
-};
-
-function LoginForm({ setAuth }: LoginFormProps) {
+function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -36,7 +32,7 @@ function LoginForm({ setAuth }: LoginFormProps) {
     validationSchema: LoginSchema,
     onSubmit: () => {
       setTimeout(() => {
-        setAuth(true);
+        window.location.href = '/home';
       }, 2000);
     },
   });
