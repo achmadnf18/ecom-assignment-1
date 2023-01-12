@@ -11,6 +11,10 @@ const withPWA = nextPWA({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  publicRuntimeConfig: {
+    BASE_URL: process.env.BASE_URL,
+    BASE_API: process.env.BASE_API,
+  },
   compiler: {
     emotion: true,
   },
