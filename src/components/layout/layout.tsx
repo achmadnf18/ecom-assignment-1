@@ -1,20 +1,20 @@
+import styled from '@emotion/styled';
 import { ReactNode } from 'react';
-
-import CustomStyles from './custom-styles';
-import Header from './header';
-import Nav from './nav';
 
 type Props = {
   children: ReactNode;
 };
 
+const RootStyle = styled('div')({
+  display: 'grid',
+  placeItems: 'center',
+  color: 'black',
+});
+
 export default function Layout({ children }: Props) {
   return (
-    <>
-      <CustomStyles />
-      <Header />
-      <Nav />
-      <main className="px-3.5 pt-8 pb-20 lg:px-6 lg:py-6">{children}</main>
-    </>
+    <main className="lg:px-6">
+      <RootStyle>{children}</RootStyle>
+    </main>
   );
 }
