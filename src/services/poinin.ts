@@ -1,3 +1,4 @@
+import { Pagination } from '@lucasmogari/react-pagination/dist/src/types';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { rtkClient } from '@/utils/api-client';
@@ -32,14 +33,14 @@ export type Promos = {
   merchantName: string;
   isHidden: boolean;
 };
-export type PromosFilter = { limit?: number; page?: number };
+export type PromosFilter = { limit?: number; page?: number; search?: string };
 
 export const poininApi = createApi({
   reducerPath: 'poininApi',
   tagTypes: ['Poinin'],
   baseQuery: rtkClient,
   endpoints: (build) => ({
-    allPromos: build.query<{ items: Promos[] }, PromosFilter>({
+    allPromos: build.query<{ items: Promos[]; pagination: Pagination }, PromosFilter>({
       query: (params) => ({
         url: '/promo/list',
         params: { ...params },

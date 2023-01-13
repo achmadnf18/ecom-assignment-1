@@ -1,31 +1,50 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react-hooks/exhaustive-deps */
 import usePagination from '@lucasmogari/react-pagination';
-import { Box, Pagination } from '@mui/material';
-import { useEffect } from 'react';
+import { Box, Pagination, TextField } from '@mui/material';
+import debounce from 'lodash.debounce';
+import { useEffect, useState } from 'react';
 
 import { useAllPromosQuery } from '@/services/poinin';
 
 import { PromoCard } from './promo-card';
+import { PromoSkeleton } from './promo-skeleton';
 
 export function PromoList() {
+  const [search, setSearch] = useState('');
   const pagination = usePagination({
     page: 1,
     itemsPerPage: 8,
-    totalItems: 0,
+    totalItems: 1,
   });
 
-  const { data } = useAllPromosQuery({ limit: pagination.itemsPerPage, page: pagination.page });
+  const { data, isFetching } = useAllPromosQuery({
+    search,
+    limit: pagination.itemsPerPage,
+    page: pagination.page,
+  });
   const promoList = data?.items || [];
 
   useEffect(() => {
-    pagination.setTotalItems(promoList?.length);
+    pagination.setTotalItems(data?.pagination.totalItems || 1);
   }, [promoList]);
 
   return (
-    <Box
-      component="section"
-      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}
-    >
+    <Box component="section" sx={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+      <Box sx={{ display: 'flex' }}>
+        <TextField
+          label="Search Promo"
+          id="search"
+          fullWidth
+          onChange={debounce((e) => setSearch(e.target.value), 2000)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              const searchVal = (e.target as HTMLTextAreaElement).value;
+              setSearch(searchVal);
+            }
+          }}
+        />
+      </Box>
       <Box
         sx={{
           display: 'flex',
@@ -35,12 +54,15 @@ export function PromoList() {
           justifyContent: 'center',
         }}
       >
-        {promoList?.map((promo) => (
-          <PromoCard key={promo.id} promo={promo} />
-        ))}
+        {isFetching && <PromoSkeleton />}
+
+        {!isFetching &&
+          promoList?.map((promo, idx) => <PromoCard key={`${idx}-${promo.id}`} promo={promo} />)}
       </Box>
 
-      <Pagination count={pagination.totalPages} onChange={(e, page) => pagination.goTo(page)} />
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Pagination count={pagination.totalPages} onChange={(e, page) => pagination.goTo(page)} />
+      </Box>
     </Box>
   );
 }
